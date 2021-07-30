@@ -7,32 +7,31 @@
     </transition>
   </router-view>
 
-  <!-- Player -->
-  <app-player></app-player>
+  <app-player />
 
-  <auth-modal/>
+  <auth-modal />
+
 </template>
 
 <script>
-import AppHeader from '@/components/Header.vue';
-import AuthModal from '@/components/Auth.vue';
 import AppPlayer from '@/components/Player.vue';
+import AppHeader from './components/Header.vue';
+import AuthModal from './components/Auth.vue';
 
 export default {
+  name: 'App',
   components: {
     AppHeader,
     AuthModal,
     AppPlayer,
   },
-  name: 'App',
   created() {
     this.$store.dispatch('init_login');
   },
 };
-
 </script>
 
-<style scoped>
+<style>
 .fade-enter-from {
   opacity: 0;
 }
@@ -45,5 +44,4 @@ export default {
   transition: all 0.5s linear;
   opacity: 0;
 }
-
 </style>

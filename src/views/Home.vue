@@ -1,5 +1,6 @@
 <template>
   <main>
+    <!-- Introduction -->
     <section class="mb-8 py-20 text-white text-center relative">
       <div class="absolute inset-0 w-full h-full bg-contain introduction-bg"
         style="background-image: url(assets/img/header.png)"></div>
@@ -23,28 +24,25 @@
     <!-- Main Content -->
     <section class="container mx-auto">
       <div class="bg-white rounded border border-gray-200 relative flex flex-col">
-        <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200"
-          v-icon-secondary="{ icon: 'headphones-alt', right: true}" >
+        <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
           <span class="card-title">Songs</span>
           <!-- Icon -->
-
+          <i class="fa fa-headphones-alt float-right text-green-400 text-2xl"></i>
         </div>
         <!-- Playlist -->
         <ol id="playlist">
           <app-song-item v-for="song in songs" :key="song.docID"
-          :song="song" />
+            :song="song" />
         </ol>
         <!-- .. end Playlist -->
       </div>
     </section>
   </main>
-  <!-- Introduction -->
 </template>
 
 <script>
 import { songsCollection } from '@/includes/firebase';
 import AppSongItem from '@/components/SongItem.vue';
-import IconSecondary from '@/directives/icon-secondary';
 
 export default {
   name: 'Home',
@@ -57,9 +55,6 @@ export default {
       maxPerPage: 25,
       pendingRequest: false,
     };
-  },
-  directives: {
-    'icon-secondary': IconSecondary,
   },
   async created() {
     this.getSongs();
@@ -90,7 +85,7 @@ export default {
 
       if (this.songs.length) {
         const lastDoc = await songsCollection
-          .doc(this.songs[this.songs.length - 1].docId)
+          .doc(this.songs[this.songs.length - 1].docID)
           .get();
         snapshots = await songsCollection
           .orderBy('modified_name')
@@ -104,14 +99,14 @@ export default {
           .get();
       }
 
-      this.pendingRequest = false;
-
       snapshots.forEach((document) => {
         this.songs.push({
-          docId: document.id,
+          docID: document.id,
           ...document.data(),
         });
       });
+
+      this.pendingRequest = false;
     },
   },
 };

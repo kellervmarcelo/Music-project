@@ -8,7 +8,7 @@ import store from '@/store';
 const routes = [
   {
     name: 'home',
-    path: '/',
+    path: '/', // example.com/
     component: Home,
   },
   {
@@ -24,19 +24,19 @@ const routes = [
       requiresAuth: true,
     },
     component: Manage,
-    // beforeEnter: (to, from, next) => {
-    //   console.log('Manage route guard');
-    //   next();
-    // },
+    beforeEnter: (to, from, next) => {
+      console.log('Manage Route Guard');
+      next();
+    },
+  },
+  {
+    path: '/manage',
+    redirect: { name: 'manage' },
   },
   {
     name: 'song',
     path: '/song/:id',
     component: Song,
-  },
-  {
-    path: '/manage',
-    redirect: { name: 'manage' },
   },
   {
     path: '/:catchAll(.*)*',
@@ -49,12 +49,15 @@ const router = createRouter({
   routes,
   linkExactActiveClass: 'text-yellow-500',
 });
-// global guard
+
 router.beforeEach((to, from, next) => {
+  // console.log(to.matched);
+
   if (!to.matched.some((record) => record.meta.requiresAuth)) {
     next();
     return;
   }
+
   if (store.state.userLoggedIn) {
     next();
   } else {

@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import { auth, usersCollection } from '@/includes/firebase';
 import { Howl } from 'howler';
-import helper from '../includes/helper';
+import helper from '@/includes/helper';
 
 export default createStore({
   state: {
@@ -62,13 +62,11 @@ export default createStore({
 
       commit('toggleAuth');
     },
-
     async login({ commit }, payload) {
       await auth.signInWithEmailAndPassword(payload.email, payload.password);
 
       commit('toggleAuth');
     },
-
     init_login({ commit }) {
       const user = auth.currentUser;
 
@@ -76,13 +74,16 @@ export default createStore({
         commit('toggleAuth');
       }
     },
-
     async signout({ commit }) {
       await auth.signOut();
 
       commit('toggleAuth');
+
+      // if (payload.route.meta.requiresAuth) {
+      //   payload.router.push({ name: 'home' });
+      // }
     },
-    async newSong({ commit, state }, payload) {
+    async newSong({ commit, state, dispatch }, payload) {
       if (state.sound instanceof Howl) {
         state.sound.unload();
       }
@@ -93,7 +94,7 @@ export default createStore({
 
       state.sound.on('play', () => {
         requestAnimationFrame(() => {
-          this.dispatch('progress');
+          dispatch('progress');
         });
       });
     },
@@ -117,12 +118,13 @@ export default createStore({
         });
       }
     },
-    updateSeek({ state }, payload) {
+    updateSeek({ state, dispatch }, payload) {
       if (!state.sound.playing) {
         return;
       }
 
       const { x, width } = payload.currentTarget.getBoundingClientRect();
+      // Document = 2000, Timeline = 1000, Click = 500, Distance = 500
       const clickX = payload.clientX - x;
       const percentage = clickX / width;
       const seconds = state.sound.duration() * percentage;
@@ -130,7 +132,7 @@ export default createStore({
       state.sound.seek(seconds);
 
       state.sound.once('seek', () => {
-        this.dispatch('progress');
+        dispatch('progress');
       });
     },
   },

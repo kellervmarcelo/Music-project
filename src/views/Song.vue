@@ -9,11 +9,11 @@
         <!-- Play/Pause Button -->
         <button type="button" class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full
           focus:outline-none" @click.prevent="newSong(song)">
-          <i class="fas" :class="{'fa-play': !playing, 'fa-pause': playing}"></i>
+          <i class="fas fa-play"></i>
         </button>
         <div class="z-50 text-left ml-8">
           <!-- Song Info -->
-          <div class="text-3xl font-bold"> {{ song.modified_name }}</div>
+          <div class="text-3xl font-bold">{{ song.modified_name }}</div>
           <div>{{ song.genre }}</div>
         </div>
       </div>
@@ -32,18 +32,18 @@
             {{ comment_alert_message }}
           </div>
           <vee-form :validation-schema="schema" @submit="addComment"
-            v-if="userLoggedIn" >
+            v-if="userLoggedIn">
             <vee-field as="textarea" name="comment"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
                 duration-500 focus:outline-none focus:border-black rounded mb-4"
               placeholder="Your comment here..."></vee-field>
-            <ErrorMessage class="text-red-600 mb-4" name="comment"/>
+            <ErrorMessage class="text-red-600" name="comment" />
             <button type="submit" class="py-1.5 px-3 rounded text-white bg-green-600 block"
               :disabled="comment_in_submission">
               Submit
             </button>
           </vee-form>
-          <!-- Sort Comments -->
+          <!-- Comment Sorting -->
           <select v-model="sort"
             class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition
             duration-500 focus:outline-none focus:border-black rounded">
@@ -71,7 +71,7 @@
 
 <script>
 import { songsCollection, auth, commentsCollection } from '@/includes/firebase';
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'Song',
@@ -89,10 +89,36 @@ export default {
       sort: '1',
     };
   },
+  computed: {
+    ...mapState(['userLoggedIn']),
+    sortedComments() {
+      return this.comments.slice().sort((a, b) => {
+        if (this.sort === '1') {
+          return new Date(b.datePosted) - new Date(a.datePosted);
+        }
+
+        return new Date(a.datePosted) - new Date(b.datePosted);
+      });
+    },
+  },
+  async created() {
+    const docSnapshot = await songsCollection.doc(this.$route.params.id).get();
+
+    if (!docSnapshot.exists) {
+      this.$router.push({ name: 'home' });
+      return;
+    }
+
+    const { sort } = this.$route.query;
+
+    this.sort = sort === '1' || sort === '2' ? sort : '1';
+
+    this.song = docSnapshot.data();
+    this.getComments();
+  },
   methods: {
     ...mapActions(['newSong']),
     async addComment(values, { resetForm }) {
-      console.log('Alô');
       this.comment_in_submission = true;
       this.comment_show_alert = true;
       this.comment_alert_variant = 'bg-blue-500';
@@ -103,7 +129,7 @@ export default {
         datePosted: new Date().toString(),
         sid: this.$route.params.id,
         name: auth.currentUser.displayName,
-        ui: auth.currentUser.uid,
+        uid: auth.currentUser.uid,
       };
 
       await commentsCollection.add(comment);
@@ -128,12 +154,12 @@ export default {
 
       this.comments = [];
 
-      snapshots.forEach((doc) => {
+      snapshots.forEach((doc) => [
         this.comments.push({
           docID: doc.id,
           ...doc.data(),
-        });
-      });
+        }),
+      ]);
     },
   },
   watch: {
@@ -148,33 +174,6 @@ export default {
         },
       });
     },
-  },
-  computed: {
-    ...mapGetters(['playing']),
-    ...mapState(['userLoggedIn']),
-    sortedComments() {
-      return this.comments.slice().sort((a, b) => {
-        if (this.sort === '1') {
-          return new Date(b.datePosted) - new Date(a.datePosted);
-        }
-
-        return new Date(a.datePosted) - new Date(b.datePosted);
-      });
-    },
-  },
-  async created() {
-    const docSnapshot = await songsCollection.doc(this.$route.params.id).get();
-    if (!docSnapshot.exists) {
-      this.$router.push({ name: 'home' });
-      return;
-    }
-
-    const { sort } = this.$route.query;
-
-    this.sort = sort === '1' || sort === '2' ? sort : '1';
-
-    this.song = docSnapshot.data();
-    this.getComments();
   },
 };
 </script>

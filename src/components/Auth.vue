@@ -1,7 +1,7 @@
 <template>
-    <!-- Auth Modal -->
+  <!-- Auth Modal -->
   <div class="fixed z-10 inset-0 overflow-y-auto" id="modal"
-  :class="{ hidden: !authModalShow }">
+    :class="{ hidden: !authModalShow }">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center
       sm:block sm:p-0">
       <div class="fixed inset-0 transition-opacity">
@@ -29,26 +29,26 @@
           <ul class="flex flex-wrap mb-4">
             <li class="flex-auto text-center">
               <a class="block rounded py-3 px-4 transition"
-              href="#"
-              @click.prevent="tab='login'"
-              :class="{
-                'hover:text-white text-white bg-blue-600': tab === 'login',
-                'hover:text-blue-600': tab === 'register'
-              }">
-              Login</a>
+                href="#" @click.prevent="tab = 'login'"
+                :class="{
+                  'hover:text-white text-white bg-blue-600': tab === 'login',
+                  'hover:text-blue-600': tab === 'register'
+                }">
+                Login
+              </a>
             </li>
             <li class="flex-auto text-center">
               <a class="block rounded py-3 px-4 transition"
-                href="#"  @click.prevent="tab='register'"
+                href="#" @click.prevent="tab = 'register'"
                 :class="{
-                'hover:text-white text-white bg-blue-600': tab === 'register',
-                'hover:text-blue-600': tab === 'login'
-              }">Register</a>
+                  'hover:text-white text-white bg-blue-600': tab === 'register',
+                  'hover:text-blue-600': tab === 'login'
+                }">Register</a>
             </li>
           </ul>
 
-          <app-login-form v-if="tab=== 'login'"/>
-          <app-register-form v-else/>
+          <app-login-form v-if="tab === 'login'" />
+          <app-register-form v-else />
         </div>
       </div>
     </div>
@@ -63,8 +63,7 @@ import AppRegisterForm from './RegisterForm.vue';
 export default {
   name: 'Auth',
   components: {
-    AppLoginForm,
-    AppRegisterForm,
+    AppLoginForm, AppRegisterForm,
   },
   data() {
     return {
@@ -72,7 +71,6 @@ export default {
     };
   },
   computed: {
-    // tu pode usar um alias para representar as propriedades que tu puxa do mapstate
     // ...mapState({
     //   modal: 'authModalShow',
     // }),
