@@ -1,0 +1,15 @@
+{
+  "home": {
+    "listen": "Ouça Boa Música! "
+  },
+  "manage": {
+    "songs": "Minhas músicas"
+  },
+  "register": {
+    "TOS": "Termos de Serviço",
+    "accept": "Eu aceito os "
+  },
+  "song": {
+    "comment_count": ""
+  }
+}
