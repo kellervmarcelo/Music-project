@@ -1,6 +1,11 @@
 {
+  "about": {
+    "presentation": "Olá a todos! Meu nome é Marcelo e eu atualmente trabalho como desenvolvedor front-end Vue. Esse projeto foi muito divertido de desenvolver, tive a oportunidade de trabalhar com várias bibliotecas como por exemplo o Howler.js(para trabalhar com arquivos de áudio) e outras que facilitaram o desenvolvimento desse app. Você pode me encontrar nas minhas redes sociais abaixo.",
+    "whoami": "Quem sou eu?"
+  },
   "home": {
-    "listen": "Ouça Boa Música! "
+    "listen": "Ouça Boa Música! ",
+    "text": "Esse é um projeto do curso Complete Vue Mastery na Udemy, oferecido pelo ZTM. Você pode se cadastrar e fazer o upload dos seus arquivos de áudio para ouvir online. "
   },
   "manage": {
     "songs": "Minhas músicas"

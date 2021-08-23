@@ -36,8 +36,9 @@
         </ul>
         <ul class="flex flex-row mt-1 ml-auto">
           <li>
-            <a href="#" class="px-2 text-white" @click.prevent="changeLocale">
+            <a href="#" class="px-2 text-white flex justify-between" @click.prevent="changeLocale">
               {{ currentLocale }}
+              <img :src="getImgUrl" alt="flag" class="w-6 h-6 ml-4">
             </a>
           </li>
         </ul>
@@ -57,6 +58,10 @@ export default {
     }),
     currentLocale() {
       return this.$i18n.locale === 'pt' ? 'Português' : 'English';
+    },
+    getImgUrl() {
+      const images = require.context('../assets/icons/', false, /\.png$/);
+      return images(`./${this.$i18n.locale === 'pt' ? 'br_flag' : 'us_flag'}.png`);
     },
   },
   methods: {

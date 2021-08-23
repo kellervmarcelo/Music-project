@@ -1,6 +1,11 @@
 {
+  "about": {
+    "presentation": "Hello, everyone! I'm glad to have you here. My name is Marcelo and I'm an Front-end developer from Brazil. I have been developing professionaly with vue for 8 months. This was a really fun project to develop, I got to know many different libraries such as Howler.js(to work with audio files) and many others. ",
+    "whoami": "Who am I? "
+  },
   "home": {
-    "listen": "Listen to Great Music!"
+    "listen": "Listen to Great Music!",
+    "text": "This is a project made by me for the final project of the Comple Vue Mastery by ZTM. It's an app you can add your audio files and listen to then online. "
   },
   "manage": {
     "songs": "My Songs"

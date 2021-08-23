@@ -8,6 +8,7 @@ export default {
     seek: '00:00',
     duration: '00:00',
     playerProgress: '0%',
+    volume: 1,
   },
   getters: {
     playing: (state) => {
@@ -24,12 +25,16 @@ export default {
       state.sound = new Howl({
         src: [payload.url],
         html5: true,
+        volume: 0.15,
       });
     },
     updatePosition(state) {
       state.seek = helper.formatTime(state.sound.seek());
       state.duration = helper.formatTime(state.sound.duration());
       state.playerProgress = `${(state.sound.seek() / state.sound.duration()) * 100}%`;
+    },
+    updateVolume(state, payload) {
+      state.volume = payload;
     },
   },
   actions: {
