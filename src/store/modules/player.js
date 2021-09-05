@@ -26,15 +26,14 @@ export default {
         src: [payload.url],
         html5: true,
         volume: 0.15,
+        mute: false,
       });
     },
     updatePosition(state) {
       state.seek = helper.formatTime(state.sound.seek());
       state.duration = helper.formatTime(state.sound.duration());
-      state.playerProgress = `${(state.sound.seek() / state.sound.duration()) * 100}%`;
-    },
-    updateVolume(state, payload) {
-      state.volume = payload;
+      state.playerProgress = `${(state.sound.seek() / state.sound.duration())
+        * 100}%`;
     },
   },
   actions: {
@@ -89,6 +88,20 @@ export default {
       state.sound.once('seek', () => {
         dispatch('progress');
       });
+    },
+    muteVolume({ state }) {
+      if (!state.sound.playing) {
+        return;
+      }
+
+      if (!state.sound.mute()) {
+        state.sound.mute(true);
+      } else {
+        state.sound.mute(false);
+      }
+    },
+    updateVolume({ state }) {
+      state.sound.volume(0.8);
     },
   },
 };
